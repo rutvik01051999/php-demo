@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    
+
 </head>
 <body>
-    <header>
+  
         <?php include '../includes/header.php'; ?>
-    </header>
+    
 
     <main>
-        <h1>Welcome to the Home Page</h1>
-        <p>This is a simple PHP app with a MySQL database.</p>
+       <div class="container mt-5">
+       <button type="button" class="btn btn-primary">Add</button>cccccccccccccccccccccccccccccccccccccccccccccccccccccc
+         
+       </div>
     </main>
 
-    <footer>
+   
         <?php include '../includes/footer.php'; ?>
-    </footer>
+ 
 </body>
 </html>

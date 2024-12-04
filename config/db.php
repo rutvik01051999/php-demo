@@ -1,18 +1,15 @@
 <?php
-// Database configuration
-define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'phpmyadmin');
-define('DB_PASSWORD', 'root');
-define('DB_DATABASE', 'php_project');
+$host = 'localhost';
+$dbname = 'learning';
+$username = 'phpmyadmin';
+$password = 'root';
 
-// Create a database connection
-function getDbConnection() {
-    try {
-        $conn = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_DATABASE, DB_USERNAME, DB_PASSWORD);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $conn;
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 ?>

@@ -1,3 +1,3 @@
 <?php
-header('Location: ../views/userList.php');
+header('Location: ../views/login.php');
 exit;
