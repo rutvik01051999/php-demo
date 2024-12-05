@@ -12,6 +12,7 @@ function login($email, $password) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['is_logged_in'] = true;
+        
         return true;
     }
     return false;

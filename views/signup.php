@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include '../core/auth.php';
 include '../core/functions.php';
 redirect_if_logged_in();

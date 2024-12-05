@@ -1,6 +1,6 @@
 <?php
 // Display all errors
-
+session_start();
 include '../includes/admin_header.php';
 include '../core/functions.php';
 include '../core/auth.php';
