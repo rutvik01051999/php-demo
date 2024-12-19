@@ -79,8 +79,8 @@
   $container.append($dark_mode_container)
 
  
-  var $header_fixed_container = $('<div />', { class: 'mb-1' }).append($header_fixed_checkbox).append('<span>Fixed</span>')
-  $container.append($header_fixed_container)
+  // var $header_fixed_container = $('<div />', { class: 'mb-1' }).append($header_fixed_checkbox).append('<span>Fixed</span>')
+  // $container.append($header_fixed_container)
 
   var $dropdown_legacy_offset_checkbox = $('<input />', {
     type: 'checkbox',

@@ -222,7 +222,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item <?= $current_page == 'student.php' || $current_page == 'teacher.php' || $current_page == 'principle.php' ? 'menu-is-opening menu-open' : '' ?>">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
@@ -239,13 +239,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= $current_page == 'teacher.php' ? 'active' : '' ?>">
+                <a href="<?php echo $baseURL; ?>/views/admin/teacher.php" class="nav-link <?= $current_page == 'teacher.php' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Teachers</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= $current_page == 'principle.php' ? 'active' : '' ?>">
+                <a href="<?php echo $baseURL; ?>/views/admin/principle.php" class="nav-link <?= $current_page == 'principle.php' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Principles</p>
                 </a>
