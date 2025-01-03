@@ -10,10 +10,18 @@ include '../../includes/header.php';
 
 ?>
 <div class="content-wrapper container">
-  <div class="container mt-5">
+  <div class="container mt-5"><br>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
       Add
     </button><br><br>
+
+
+     <!-- Pagination controls -->
+     <nav id="paginationNav">
+      <ul class="pagination">
+        <!-- Pagination buttons will be inserted here -->
+      </ul>
+    </nav>
 
     <!-- Table to display user data -->
     <table class="table table-bordered" id="usersTable">
@@ -30,16 +38,8 @@ include '../../includes/header.php';
       </tbody>
     </table>
 
-    <!-- Pagination controls -->
-    <nav id="paginationNav">
-      <ul class="pagination">
-        <!-- Pagination buttons will be inserted here -->
-      </ul>
-    </nav>
+   
   </div>
-
-
-
 
 </div>
 <!-- Modal -->
@@ -57,6 +57,16 @@ include '../../includes/header.php';
           <div>Student Detail</div>
           <div class="form-row">
             <div class="form-group col-md-6">
+              <label for="first_name">First Name</label>
+              <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first_name">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="last_name">Last Name</label>
+              <input type="text" name="last_name" class="form-control" id="last_name" placeholder="last_name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
               <label for="inputEmail4">Email</label>
               <input type="email" class="form-control" name="email" id="inputEmail4" placeholder="Email">
             </div>
@@ -68,7 +78,7 @@ include '../../includes/header.php';
           <div>Current Address</div>
           <div class="form-group">
             <label for="inputAddress_current">Address</label>
-            <input type="text" name="inputAddress_current"  class="form-control" id="inputAddress_current" placeholder="1234 Main St">
+            <input type="text" name="inputAddress_current" class="form-control" id="inputAddress_current" placeholder="1234 Main St">
           </div>
           <div class="form-group">
             <label for="inputAddress2_current">Address 2</label>
@@ -108,7 +118,7 @@ include '../../includes/header.php';
             </div>
             <div class="form-group col-md-4">
               <label for="inputState_permanent">State</label>
-              <select id="inputState_permanent" name = "inputState_permanent" class="form-control">
+              <select id="inputState_permanent" name="inputState_permanent" class="form-control">
                 <option selected>Choose...</option>
                 <option>...</option>
               </select>
@@ -135,7 +145,7 @@ include '../../includes/header.php';
   // Function to load users and pagination
   function loadUsers(page = 1) {
     $.ajax({
-      url: '../../core/students.php', // Backend PHP script
+      url: '../../core/student/get.php', // Backend PHP script
       method: 'GET',
       data: {
         page: page
@@ -148,7 +158,7 @@ include '../../includes/header.php';
           tableRows += `
                             <tr>
                                 <td>${user.id}</td>
-                                <td>${user.name}</td>
+                                <td>${user.first_name}</td>
                                 <td>${user.email}</td>
                                 <td>${user.created_at}</td>
                             </tr>
@@ -206,40 +216,40 @@ include '../../includes/header.php';
 
   loadUsers();
 
-  $(document).ready(function () {
+  $(document).ready(function() {
 
-            $('#dataForm').on('submit', function (e) {
-                e.preventDefault(); // Prevent default form submission
-                const formData = new FormData(this);
-                $.ajax({
-                    url: '../../core/store.php', // PHP file to handle form submission
-                    type: 'POST',
-                    data: formData,
-                    processData: false, // Prevent jQuery from converting FormData to a query string
-                    contentType: false, // Use the default content type
-                    success: function (response) {
-                        // Parse JSON response
+    $('#dataForm').on('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission
+      const formData = new FormData(this);
+      $.ajax({
+        url: '../../core/student/store.php', // PHP file to handle form submission
+        type: 'POST',
+        data: formData,
+        processData: false, // Prevent jQuery from converting FormData to a query string
+        contentType: false, // Use the default content type
+        success: function(response) {
+          // Parse JSON response
 
-                        console.log(response);
-                        
-                        const data = response.data;
+          console.log(response);
 
-                        console.log(data);
-                        if (data) {
-                            // Append data to the table
-                            const newRow = `<tr><td>${data.name}</td><td>${data.email}</td></tr>`;
-                            $('#usersTable tbody').append(newRow);
-                            $('#dataForm')[0].reset(); // Reset the form
-                        } else {
-                            alert(data.message); // Display error message
-                        }
-                    },
-                    error: function (error) {
-                       console.log(error);
-                    }
-                });
-            });
-        });
+          const data = response.data;
+
+          console.log(data);
+          if (data) {
+            // Append data to the table
+            const newRow = `<tr><td>${data.name}</td><td>${data.email}</td></tr>`;
+            $('#usersTable tbody').append(newRow);
+            $('#dataForm')[0].reset(); // Reset the form
+          } else {
+            alert(data.message); // Display error message
+          }
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    });
+  });
 
 
   //form validation
