@@ -11,7 +11,7 @@ include '../../includes/header.php';
 ?>
 <div class="content-wrapper container">
   <div class="container mt-5"><br>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    <button type="button" class="btn btn-primary addBtn">
       Add
     </button><br><br>
 
@@ -54,6 +54,7 @@ include '../../includes/header.php';
         </button>
       </div>
       <div class="modal-body">
+      <div class="error"></div>
         <form id="dataForm">
           <div>Student Detail</div>
           <div class="form-row">
@@ -107,7 +108,7 @@ include '../../includes/header.php';
 
           <div>Permanent Address</div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" id="same_address">
+            <input class="form-check-input" type="checkbox" value="1" name="same_address" id="same_address">
             <label class="form-check-label" for="same_address">
               Same as current
             </label>
@@ -259,7 +260,7 @@ include '../../includes/header.php';
 
           const data = response.data;
 
-          // console.log(data);
+          console.log(data);
           if (data) {
 
             $('#exampleModal').modal('hide');
@@ -279,12 +280,22 @@ include '../../includes/header.php';
     $('#same_address').on('change', function() {
       if ($(this).is(':checked')) {
         $('.hide_section').hide()
-      }else{
+        $('#same_address').val(0);
+      } else {
         $('.hide_section').show()
+        $('#same_address').val(1);
+
       }
-      
+
     });
 
+
+    $('.addBtn').on('click', function() {
+      $('#same_address').val(1);
+      $('#same_address').prop('checked', false);
+      $('.hide_section').show()
+      $('#exampleModal').modal('show');
+    });
 
   });
 
