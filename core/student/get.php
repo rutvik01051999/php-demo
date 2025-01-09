@@ -2,7 +2,7 @@
 require_once '/var/www/html/php-project/config/db.php';
 
 // Pagination settings
-$limit = 5; // Number of records per page
+$limit = 10; // Number of records per page
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Get the current page
 $start_from = ($page - 1) * $limit; // Starting record for the current page
 

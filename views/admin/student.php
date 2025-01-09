@@ -16,8 +16,8 @@ include '../../includes/header.php';
     </button><br><br>
 
 
-     <!-- Pagination controls -->
-     <nav id="paginationNav">
+    <!-- Pagination controls -->
+    <nav id="paginationNav">
       <ul class="pagination">
         <!-- Pagination buttons will be inserted here -->
       </ul>
@@ -31,6 +31,7 @@ include '../../includes/header.php';
           <th>Name</th>
           <th>Email</th>
           <th>Created At</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -38,7 +39,7 @@ include '../../includes/header.php';
       </tbody>
     </table>
 
-   
+
   </div>
 
 </div>
@@ -93,7 +94,9 @@ include '../../includes/header.php';
               <label for="inputState_current">State</label>
               <select id="inputState_current" name="inputState_current" class="form-control">
                 <option selected>Choose...</option>
-                <option>GJ</option>
+                <option>Gujarat</option>
+                <option>Maharashtra</option>
+
               </select>
             </div>
             <div class="form-group col-md-2">
@@ -103,30 +106,40 @@ include '../../includes/header.php';
           </div>
 
           <div>Permanent Address</div>
-          <div class="form-group">
-            <label for="inputAddress_permanent">Address</label>
-            <input type="text" name="inputAddress_permanent" class="form-control" id="inputAddress_permanent" placeholder="1234 Main St">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="same_address">
+            <label class="form-check-label" for="same_address">
+              Same as current
+            </label>
           </div>
-          <div class="form-group">
-            <label for="inputAddress2_permanent">Address 2</label>
-            <input type="text" name="inputAddress2_permanent" class="form-control" id="inputAddress2_permanent" placeholder="Apartment, studio, or floor">
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity_permanent">City</label>
-              <input name="inputCity_permanent" type="text" class="form-control" id="inputCity_permanent">
+
+          <div class="hide_section">
+            <div class="form-group">
+              <label for="inputAddress_permanent">Address</label>
+              <input type="text" name="inputAddress_permanent" class="form-control" id="inputAddress_permanent" placeholder="1234 Main St">
             </div>
-            <div class="form-group col-md-4">
-              <label for="inputState_permanent">State</label>
-              <select id="inputState_permanent" name="inputState_permanent" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
-              </select>
+            <div class="form-group">
+              <label for="inputAddress2_permanent">Address 2</label>
+              <input type="text" name="inputAddress2_permanent" class="form-control" id="inputAddress2_permanent" placeholder="Apartment, studio, or floor">
             </div>
-            <div class="form-group col-md-2">
-              <label for="inputZip_permanent">Zip</label>
-              <input type="text" name="inputZip_permanent" class="form-control" id="inputZip_permanent">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputCity_permanent">City</label>
+                <input name="inputCity_permanent" type="text" class="form-control" id="inputCity_permanent">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="inputState_permanent">State</label>
+                <select id="inputState_permanent" name="inputState_permanent" class="form-control">
+                  <option selected>Choose...</option>
+                  <option>...</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="inputZip_permanent">Zip</label>
+                <input type="text" name="inputZip_permanent" class="form-control" id="inputZip_permanent">
+              </div>
             </div>
+
           </div>
           <button type="submit" class="btn btn-primary">Save changes</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -161,6 +174,12 @@ include '../../includes/header.php';
                                 <td>${user.first_name}</td>
                                 <td>${user.email}</td>
                                 <td>${user.created_at}</td>
+                                <td> <button class="btn btn-primary btn-sm" data-id="">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-danger btn-sm">
+              <i class="fas fa-trash-alt"></i> Delete
+            </button></td>
                             </tr>
                         `;
         });
@@ -186,6 +205,7 @@ include '../../includes/header.php';
 
         // Add page number buttons
         for (var i = 1; i <= response.total_pages; i++) {
+
           paginationButtons += `
                             <li class="page-item ${i === page ? 'active' : ''}">
                                 <a class="page-link" href="javascript:void(0);" onclick="loadUsers(${i})">${i}</a>
@@ -207,8 +227,10 @@ include '../../includes/header.php';
                             </li>
                         `;
         }
+        console.log(paginationButtons)
 
         // Insert pagination buttons
+        $('#paginationNav .pagination').html('');
         $('#paginationNav .pagination').html(paginationButtons);
       }
     });
@@ -217,6 +239,9 @@ include '../../includes/header.php';
   loadUsers();
 
   $(document).ready(function() {
+    var activePageLinkText = $('.active').find('.page-link').text();
+
+    console.log(activePageLinkText, 'active page link text');
 
     $('#dataForm').on('submit', function(e) {
       e.preventDefault(); // Prevent default form submission
@@ -234,12 +259,13 @@ include '../../includes/header.php';
 
           const data = response.data;
 
-          console.log(data);
+          // console.log(data);
           if (data) {
-            // Append data to the table
-            const newRow = `<tr><td>${data.name}</td><td>${data.email}</td></tr>`;
-            $('#usersTable tbody').append(newRow);
-            $('#dataForm')[0].reset(); // Reset the form
+
+            $('#exampleModal').modal('hide');
+            $('#dataForm')[0].reset();
+            loadUsers($('.active').find('.page-link').text());
+
           } else {
             alert(data.message); // Display error message
           }
@@ -249,6 +275,17 @@ include '../../includes/header.php';
         }
       });
     });
+
+    $('#same_address').on('change', function() {
+      if ($(this).is(':checked')) {
+        $('.hide_section').hide()
+      }else{
+        $('.hide_section').show()
+      }
+      
+    });
+
+
   });
 
 

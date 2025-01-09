@@ -29,6 +29,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
   <link rel="stylesheet" href="<?php echo $baseURL; ?>/public/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="<?php echo $baseURL; ?>/public/plugins/summernote/summernote-bs4.min.css">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">

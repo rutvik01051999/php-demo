@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
 
         // Bind parameters
-        $stmt->bindParam(':first_name', $email);
-        $stmt->bindParam(':last_name', $email);
+        $stmt->bindParam(':first_name', $first_name);
+        $stmt->bindParam(':last_name', $last_name);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':mobile', $mobile);
         $stmt->bindParam(':inputAddress_current', $inputAddress_current);
