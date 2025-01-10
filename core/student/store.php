@@ -20,11 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputZip_permanent = trim($_POST['inputZip_permanent']);
     $checkbox = trim($_POST['same_address']);
 
-
-    echo $checkbox;
-    exit;
-
-
     // Validation errors array
     $errors = [];
 

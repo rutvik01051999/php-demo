@@ -254,21 +254,26 @@ include '../../includes/header.php';
         processData: false, // Prevent jQuery from converting FormData to a query string
         contentType: false, // Use the default content type
         success: function(response) {
+
+
+          console.log(response.errors)
           // Parse JSON response
 
-          console.log(response);
+          if(response.success == false){
+            response.errors.forEach(function (error) {
+                        toastr.error(error);
+            });
+          }
+          toastr.error('errpor');
 
-          const data = response.data;
-
-          console.log(data);
-          if (data) {
+          if (response.success == true) {
 
             $('#exampleModal').modal('hide');
             $('#dataForm')[0].reset();
             loadUsers($('.active').find('.page-link').text());
 
           } else {
-            alert(data.message); // Display error message
+            // alert(data.message); // Display error message
           }
         },
         error: function(error) {
