@@ -27,10 +27,10 @@ include '../../includes/header.php';
     <table class="table table-bordered" id="usersTable">
       <thead>
         <tr>
-          <th>ID</th>
+          <th></th>
           <th>Name</th>
           <th>Email</th>
-          <th>Created At</th>
+          <th>Date</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -54,8 +54,9 @@ include '../../includes/header.php';
         </button>
       </div>
       <div class="modal-body">
-      <div class="error"></div>
+        <div class="error"></div>
         <form id="dataForm">
+          <input type="hidden" name="id" id="id">
           <div>Student Detail</div>
           <div class="form-row">
             <div class="form-group col-md-6">
@@ -132,7 +133,8 @@ include '../../includes/header.php';
                 <label for="inputState_permanent">State</label>
                 <select id="inputState_permanent" name="inputState_permanent" class="form-control">
                   <option selected>Choose...</option>
-                  <option>...</option>
+                  <option>Gujarat</option>
+                  <option>Maharashtra</option>
                 </select>
               </div>
               <div class="form-group col-md-2">
@@ -158,11 +160,12 @@ include '../../includes/header.php';
 <script>
   // Function to load users and pagination
   function loadUsers(page = 1) {
+    console.log(page)
     $.ajax({
       url: '../../core/student/get.php', // Backend PHP script
       method: 'GET',
       data: {
-        page: page
+        page: page,
       },
       dataType: 'json',
       success: function(response) {
@@ -175,7 +178,7 @@ include '../../includes/header.php';
                                 <td>${user.first_name}</td>
                                 <td>${user.email}</td>
                                 <td>${user.created_at}</td>
-                                <td> <button class="btn btn-primary btn-sm" data-id="">
+                                <td> <button class="btn btn-primary btn-sm edit" data-id="${user.id}">
               <i class="fas fa-edit"></i> Edit
             </button>
             <button class="btn btn-danger btn-sm">
@@ -228,7 +231,7 @@ include '../../includes/header.php';
                             </li>
                         `;
         }
-        console.log(paginationButtons)
+        // console.log(paginationButtons)
 
         // Insert pagination buttons
         $('#paginationNav .pagination').html('');
@@ -247,6 +250,12 @@ include '../../includes/header.php';
     $('#dataForm').on('submit', function(e) {
       e.preventDefault(); // Prevent default form submission
       const formData = new FormData(this);
+      // Handle checkbox
+      if ($('#same_address').is(':checked')) {
+        formData.append('same_address', 1); // Send 1 if checked
+      } else {
+        formData.append('same_address', 0); // Send 0 if unchecked
+      }
       $.ajax({
         url: '../../core/student/store.php', // PHP file to handle form submission
         type: 'POST',
@@ -259,12 +268,25 @@ include '../../includes/header.php';
           console.log(response.errors)
           // Parse JSON response
 
-          if(response.success == false){
-            response.errors.forEach(function (error) {
-                        toastr.error(error);
-            });
+          if (response.success === false) {
+            console.log(response.errors); // Debugging: Check the type of response.errors
+
+            if (Array.isArray(response.errors)) {
+              response.errors.forEach(function(error) {
+                toastr.error(error);
+              });
+            } else if (typeof response.errors === 'string') {
+              toastr.error(response.errors); // Handle the case where errors is a single string
+            } else if (typeof response.errors === 'object') {
+              // If it's an object, extract its values
+              Object.values(response.errors).forEach(function(error) {
+                toastr.error(error);
+              });
+            } else {
+              toastr.error("An unknown error occurred.");
+            }
           }
-          toastr.error('errpor');
+
 
           if (response.success == true) {
 
@@ -299,11 +321,41 @@ include '../../includes/header.php';
       $('#same_address').val(1);
       $('#same_address').prop('checked', false);
       $('.hide_section').show()
+      $('#dataForm')[0].reset();
       $('#exampleModal').modal('show');
     });
 
+
+    $(document).on('click', '.edit', function() {
+      var userId = $(this).data('id');
+
+      $.ajax({
+        url: '../../core/student/edit.php', // PHP file to handle form submission
+        type: 'POST',
+        data: {
+          "id": userId
+        },
+        dataType: 'json',
+        success: function(response) {
+          $('#exampleModal').modal('show');
+          $('#first_name').val(response.data.first_name);
+          $('#last_name').val(response.data.last_name);
+          $('#inputEmail4').val(response.data.email);
+          $('#mobile').val(response.data.mobile);
+          $('#inputAddress_current').val(response.data.inputAddress_current);
+          $('#inputAddress2_current').val(response.data.inputAddress2_current);
+          $('#inputCity_current').val(response.data.inputCity_current);
+          $('#inputZip_current').val(response.data.inputZip_current);
+          $('#first_name').val(response.data.first_name);
+          $('#id').val(response.data.id);
+          console.log(response.data);
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    });
+
+
   });
-
-
-  //form validation
 </script>

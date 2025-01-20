@@ -3,7 +3,13 @@ header('Content-Type: application/json');
 require_once '/var/www/html/php-project/config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // echo '<pre>';
+    // print_r($_POST);  // Print the entire POST data
+    // echo '</pre>';
+
     // Retrieve input data
+    $id = isset($_POST['id']) ? trim($_POST['id']) : null;
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $email = trim($_POST['email']);
@@ -13,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputCity_current = trim($_POST['inputCity_current']);
     $inputState_current = trim($_POST['inputState_current']);
     $inputZip_current = trim($_POST['inputZip_current']);
-    $inputAddress_permanent = trim($_POST['inputAddress_permanent']);
-    $inputAddress2_permanent = trim($_POST['inputAddress2_permanent']);
-    $inputCity_permanent = trim($_POST['inputCity_permanent']);
-    $inputState_permanent = trim($_POST['inputState_permanent']);
+    $inputAddress_permanent = trim($_POST['inputAddress_permanent']) ? trim($_POST['inputAddress_permanent']) : null;
+    $inputAddress2_permanent = trim($_POST['inputAddress2_permanent']) ? trim($_POST['inputAddress2_permanent']) : null;
+    $inputCity_permanent = trim($_POST['inputCity_permanent']) ? trim($_POST['inputCity_permanent']) : null;
+    $inputState_permanent = trim($_POST['inputState_permanent']) ? trim($_POST['inputState_permanent']) : null;
     $inputZip_permanent = trim($_POST['inputZip_permanent']);
-    $checkbox = trim($_POST['same_address']);
+    $same_address = trim($_POST['same_address']);
 
     // Validation errors array
     $errors = [];
@@ -66,22 +72,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['inputZip_current'] = "ZIP code must be numeric.";
     }
 
-    if (empty($inputAddress_permanent)) {
-        $errors['inputAddress_permanent'] = "Permanent address is required.";
-    }
+    if ($same_address == 0) {
 
-    if (empty($inputCity_permanent)) {
-        $errors['inputCity_permanent'] = "Permanent city is required.";
-    }
+        if (empty($inputAddress_permanent)) {
+            $errors['inputAddress_permanent'] = "Permanent address is required.";
+        }
 
-    if (empty($inputState_permanent)) {
-        $errors['inputState_permanent'] = "Permanent state is required.";
-    }
+        if (empty($inputCity_permanent)) {
+            $errors['inputCity_permanent'] = "Permanent city is required.";
+        }
 
-    if (empty($inputZip_permanent)) {
-        $errors['inputZip_permanent'] = "Permanent ZIP code is required.";
-    } elseif (!is_numeric($inputZip_permanent)) {
-        $errors['inputZip_permanent'] = "ZIP code must be numeric.";
+        if (empty($inputState_permanent)) {
+            $errors['inputState_permanent'] = "Permanent state is required.";
+        }
+
+        if (empty($inputZip_permanent)) {
+            $errors['inputZip_permanent'] = "Permanent ZIP code is required.";
+        } elseif (!is_numeric($inputZip_permanent)) {
+            $errors['inputZip_permanent'] = "ZIP code must be numeric.";
+        }
     }
 
     // Check for validation errors
@@ -94,13 +103,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Database connection
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Insert query
-        $stmt = $pdo->prepare("
-            INSERT INTO students 
-            (first_name, last_name, email, mobile, inputAddress_current, inputAddress2_current, inputCity_current, inputState_current, inputZip_current, inputAddress_permanent, inputAddress2_permanent, inputCity_permanent, inputState_permanent, inputZip_permanent)
-            VALUES 
-            (:first_name, :last_name, :email, :mobile, :inputAddress_current, :inputAddress2_current, :inputCity_current, :inputState_current, :inputZip_current, :inputAddress_permanent, :inputAddress2_permanent, :inputCity_permanent, :inputState_permanent, :inputZip_permanent)
-        ");
+        if ($id) {
+            // Check if the student exists
+            $stmt = $pdo->prepare("SELECT * FROM students WHERE id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $existingStudent = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($existingStudent) {
+                // Update existing student
+                $stmt = $pdo->prepare("
+                    UPDATE students SET
+                    first_name = :first_name,
+                    last_name = :last_name,
+                    email = :email,
+                    mobile = :mobile,
+                    inputAddress_current = :inputAddress_current,
+                    inputAddress2_current = :inputAddress2_current,
+                    inputCity_current = :inputCity_current,
+                    inputState_current = :inputState_current,
+                    inputZip_current = :inputZip_current,
+                    inputAddress_permanent = :inputAddress_permanent,
+                    inputAddress2_permanent = :inputAddress2_permanent,
+                    inputCity_permanent = :inputCity_permanent,
+                    inputState_permanent = :inputState_permanent,
+                    inputZip_permanent = :inputZip_permanent,
+                    same_address = :same_address
+                    WHERE id = :id
+                ");
+
+                // Bind parameters
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Student not found.']);
+                exit;
+            }
+        } else {
+            // Insert new student
+            $stmt = $pdo->prepare("
+                INSERT INTO students 
+                (first_name, last_name, email, mobile, inputAddress_current, inputAddress2_current, inputCity_current, inputState_current, inputZip_current, inputAddress_permanent, inputAddress2_permanent, inputCity_permanent, inputState_permanent, inputZip_permanent,same_address)
+                VALUES 
+                (:first_name, :last_name, :email, :mobile, :inputAddress_current, :inputAddress2_current, :inputCity_current, :inputState_current, :inputZip_current, :inputAddress_permanent, :inputAddress2_permanent, :inputCity_permanent, :inputState_permanent, :inputZip_permanent, :same_address)
+            ");
+        }
 
         // Bind parameters
         $stmt->bindParam(':first_name', $first_name);
@@ -117,22 +163,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':inputCity_permanent', $inputCity_permanent);
         $stmt->bindParam(':inputState_permanent', $inputState_permanent);
         $stmt->bindParam(':inputZip_permanent', $inputZip_permanent);
-
+        $stmt->bindParam(':same_address', $same_address);
         // Execute query
         $stmt->execute();
 
-        // Fetch the last inserted ID
-        $lastId = $pdo->lastInsertId();
+        if (!$id) {
+            $id = $pdo->lastInsertId(); // Fetch new ID if inserted
+        }
 
-        // Query the newly inserted record
+        // Fetch the updated/newly inserted record
         $query = $pdo->prepare("SELECT * FROM students WHERE id = :id");
-        $query->bindParam(':id', $lastId, PDO::PARAM_INT);
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();
+        $student = $query->fetch(PDO::FETCH_ASSOC);
 
-        // Fetch the record as an associative array
-        $newRecord = $query->fetch(PDO::FETCH_ASSOC);
-
-        echo json_encode(['success' => true, 'data' => $newRecord]);
+        echo json_encode(['success' => true, 'data' => $student]);
     } catch (PDOException $e) {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
