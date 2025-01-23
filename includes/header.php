@@ -228,7 +228,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
               </p>
             </a>
           </li>
-          <li class="nav-item <?= $current_page == 'student.php' || $current_page == 'teacher.php' || $current_page == 'principle.php' ? 'menu-is-opening menu-open' : '' ?>">
+          <li class="nav-item <?= $current_page == 'student.php' || $current_page == 'teacher.php' || $current_page == 'principle.php' || $current_page == 'student_class.php' ? 'menu-is-opening menu-open' : '' ?>">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
@@ -238,8 +238,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
               </p>
             </a>
             <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="<?php echo $baseURL; ?>/views/admin/student_class.php?role=<?php echo 'student'; ?>" class="nav-link <?= $current_page == 'student.php' ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Students class</p>
+                </a>
+              </li>
               <li class="nav-item">
-                <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= $current_page == 'student.php' ? 'active' : '' ?>">
+                <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= ($current_page == 'student.php' || $current_page == 'student_class.php') ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Students</p>
                 </a>
@@ -268,6 +274,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
               </p>
             </a>
             <ul class="nav nav-treeview">
+             
               <li class="nav-item">
                 <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= $current_page == 'student.php' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
