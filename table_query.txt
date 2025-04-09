@@ -1,0 +1,19 @@
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    mobile VARCHAR(20) NOT NULL,
+    inputAddress_current TEXT NOT NULL,
+    inputAddress2_current TEXT NOT NULL,
+    inputCity_current VARCHAR(100) NOT NULL,
+    inputState_current VARCHAR(100) NOT NULL,
+    inputZip_current VARCHAR(20) NOT NULL,
+    inputAddress_permanent TEXT,
+    inputAddress2_permanent TEXT,
+    inputCity_permanent VARCHAR(100),
+    inputState_permanent VARCHAR(100),
+    inputZip_permanent VARCHAR(20),
+    same_address VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

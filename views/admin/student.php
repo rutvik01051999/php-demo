@@ -9,7 +9,7 @@ include '../../includes/header.php';
 
 
 ?>
-<div class="content-wrapper container">
+<div class="content-wrapper ">
   <div class="container mt-5"><br>
     <button type="button" class="btn btn-primary addBtn">
       Add
