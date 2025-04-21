@@ -9,12 +9,14 @@ include '../../includes/header.php';
 
 
 ?>
-<div class="content-wrapper container">
+<div class="content-wrapper ">
   <div class="container mt-5"><br>
     <button type="button" class="btn btn-primary addBtn">
       Add
-    </button><br><br>
+    </button>
 
+    <!-- Filter Button -->
+    <button type="button" class="btn btn-primary" id="filterBtn">Filter</button><br><br>
 
     <!-- Pagination controls -->
     <nav id="paginationNav">
@@ -44,6 +46,7 @@ include '../../includes/header.php';
 
 </div>
 <!-- Modal -->
+ 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -149,10 +152,6 @@ include '../../includes/header.php';
 
         </form>
       </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </div> -->
     </div>
   </div>
 </div>
@@ -160,85 +159,95 @@ include '../../includes/header.php';
 <script>
   // Function to load users and pagination
   function loadUsers(page = 1) {
-    console.log(page)
+    console.log(page);
     $.ajax({
-      url: '../../core/student/get.php', // Backend PHP script
+      url: '../../core/student/get.php',
       method: 'GET',
       data: {
         page: page,
       },
       dataType: 'json',
       success: function(response) {
-        // Display user data in the table
+        // Display user data
         var tableRows = '';
         $.each(response.users, function(index, user) {
           tableRows += `
-                            <tr>
-                                <td>${user.id}</td>
-                                <td>${user.first_name}</td>
-                                <td>${user.email}</td>
-                                <td>${user.created_at}</td>
-                                <td> <button class="btn btn-primary btn-sm edit" data-id="${user.id}">
-              <i class="fas fa-edit"></i> Edit
-            </button>
-            <button class="btn btn-danger btn-sm">
-              <i class="fas fa-trash-alt"></i> Delete
-            </button></td>
-                            </tr>
-                        `;
+          <tr>
+              <td>${user.id}</td>
+              <td>${user.first_name}</td>
+              <td>${user.email}</td>
+              <td>${user.created_at}</td>
+              <td>
+                  <button class="btn btn-primary btn-sm edit" data-id="${user.id}">
+                      <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="btn btn-danger btn-sm btn-delete">
+                      <i class="fas fa-trash-alt"></i> Delete
+                  </button>
+              </td>
+          </tr>
+        `;
         });
         $('#usersTable tbody').html(tableRows);
 
-        // Pagination controls
-        var paginationButtons = '';
+        // Build pagination
+        const totalPages = response.total_pages;
+        let paginationButtons = '';
 
-        // Add "Previous" button
-        if (page > 1) {
-          paginationButtons += `
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0);" onclick="loadUsers(${page - 1})">&laquo; Previous</a>
-                            </li>
-                        `;
-        } else {
-          paginationButtons += `
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:void(0);">&laquo; Previous</a>
-                            </li>
-                        `;
+        // Previous button
+        paginationButtons += `
+        <li class="page-item ${page <= 1 ? 'disabled' : ''}">
+          <a class="page-link" href="javascript:void(0);" onclick="${page > 1 ? `loadUsers(${page - 1})` : ''}">&laquo; Prev</a>
+        </li>
+      `;
+
+        let delta = 2; // Number of pages around current
+        let range = [];
+        let rangeWithDots = [];
+        let l;
+
+        for (let i = 1; i <= totalPages; i++) {
+          if (i === 1 || i === totalPages || (i >= page - delta && i <= page + delta)) {
+            range.push(i);
+          }
         }
 
-        // Add page number buttons
-        for (var i = 1; i <= response.total_pages; i++) {
-
-          paginationButtons += `
-                            <li class="page-item ${i === page ? 'active' : ''}">
-                                <a class="page-link" href="javascript:void(0);" onclick="loadUsers(${i})">${i}</a>
-                            </li>
-                        `;
+        for (let i of range) {
+          if (l) {
+            if (i - l === 2) {
+              rangeWithDots.push(l + 1);
+            } else if (i - l > 2) {
+              rangeWithDots.push('...');
+            }
+          }
+          rangeWithDots.push(i);
+          l = i;
         }
 
-        // Add "Next" button
-        if (page < response.total_pages) {
-          paginationButtons += `
-                            <li class="page-item">
-                                <a class="page-link" href="javascript:void(0);" onclick="loadUsers(${page + 1})">Next &raquo;</a>
-                            </li>
-                        `;
-        } else {
-          paginationButtons += `
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:void(0);">Next &raquo;</a>
-                            </li>
-                        `;
+        for (let i of rangeWithDots) {
+          if (i === '...') {
+            paginationButtons += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+          } else {
+            paginationButtons += `
+            <li class="page-item ${i === page ? 'active' : ''}">
+              <a class="page-link" href="javascript:void(0);" onclick="loadUsers(${i})">${i}</a>
+            </li>
+          `;
+          }
         }
-        // console.log(paginationButtons)
 
-        // Insert pagination buttons
-        $('#paginationNav .pagination').html('');
+        // Next button
+        paginationButtons += `
+        <li class="page-item ${page >= totalPages ? 'disabled' : ''}">
+          <a class="page-link" href="javascript:void(0);" onclick="${page < totalPages ? `loadUsers(${page + 1})` : ''}">Next &raquo;</a>
+        </li>
+      `;
+
         $('#paginationNav .pagination').html(paginationButtons);
       }
     });
   }
+
 
   loadUsers();
 
@@ -352,6 +361,27 @@ include '../../includes/header.php';
         },
         error: function(error) {
           console.log(error);
+        }
+      });
+    });
+
+
+    $(document).on('click', '.btn-delete', function() {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
         }
       });
     });

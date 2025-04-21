@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $dbname = 'learning';
-$username = 'phpmyadmin';
+$username = 'root';
 $password = 'root';
 
 try {
