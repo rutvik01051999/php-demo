@@ -13,8 +13,10 @@ include '../../includes/header.php';
   <div class="container mt-5"><br>
     <button type="button" class="btn btn-primary addBtn">
       Add
-    </button><br><br>
+    </button>
 
+    <!-- Filter Button -->
+    <button type="button" class="btn btn-primary" id="filterBtn">Filter</button><br><br>
 
     <!-- Pagination controls -->
     <nav id="paginationNav">
@@ -44,6 +46,7 @@ include '../../includes/header.php';
 
 </div>
 <!-- Modal -->
+ 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -149,10 +152,6 @@ include '../../includes/header.php';
 
         </form>
       </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </div> -->
     </div>
   </div>
 </div>
@@ -160,19 +159,19 @@ include '../../includes/header.php';
 <script>
   // Function to load users and pagination
   function loadUsers(page = 1) {
-  console.log(page);
-  $.ajax({
-    url: '../../core/student/get.php',
-    method: 'GET',
-    data: {
-      page: page,
-    },
-    dataType: 'json',
-    success: function(response) {
-      // Display user data
-      var tableRows = '';
-      $.each(response.users, function(index, user) {
-        tableRows += `
+    console.log(page);
+    $.ajax({
+      url: '../../core/student/get.php',
+      method: 'GET',
+      data: {
+        page: page,
+      },
+      dataType: 'json',
+      success: function(response) {
+        // Display user data
+        var tableRows = '';
+        $.each(response.users, function(index, user) {
+          tableRows += `
           <tr>
               <td>${user.id}</td>
               <td>${user.first_name}</td>
@@ -188,66 +187,66 @@ include '../../includes/header.php';
               </td>
           </tr>
         `;
-      });
-      $('#usersTable tbody').html(tableRows);
+        });
+        $('#usersTable tbody').html(tableRows);
 
-      // Build pagination
-      const totalPages = response.total_pages;
-      let paginationButtons = '';
+        // Build pagination
+        const totalPages = response.total_pages;
+        let paginationButtons = '';
 
-      // Previous button
-      paginationButtons += `
+        // Previous button
+        paginationButtons += `
         <li class="page-item ${page <= 1 ? 'disabled' : ''}">
           <a class="page-link" href="javascript:void(0);" onclick="${page > 1 ? `loadUsers(${page - 1})` : ''}">&laquo; Prev</a>
         </li>
       `;
 
-      let delta = 2; // Number of pages around current
-      let range = [];
-      let rangeWithDots = [];
-      let l;
+        let delta = 2; // Number of pages around current
+        let range = [];
+        let rangeWithDots = [];
+        let l;
 
-      for (let i = 1; i <= totalPages; i++) {
-        if (i === 1 || i === totalPages || (i >= page - delta && i <= page + delta)) {
-          range.push(i);
-        }
-      }
-
-      for (let i of range) {
-        if (l) {
-          if (i - l === 2) {
-            rangeWithDots.push(l + 1);
-          } else if (i - l > 2) {
-            rangeWithDots.push('...');
+        for (let i = 1; i <= totalPages; i++) {
+          if (i === 1 || i === totalPages || (i >= page - delta && i <= page + delta)) {
+            range.push(i);
           }
         }
-        rangeWithDots.push(i);
-        l = i;
-      }
 
-      for (let i of rangeWithDots) {
-        if (i === '...') {
-          paginationButtons += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
-        } else {
-          paginationButtons += `
+        for (let i of range) {
+          if (l) {
+            if (i - l === 2) {
+              rangeWithDots.push(l + 1);
+            } else if (i - l > 2) {
+              rangeWithDots.push('...');
+            }
+          }
+          rangeWithDots.push(i);
+          l = i;
+        }
+
+        for (let i of rangeWithDots) {
+          if (i === '...') {
+            paginationButtons += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+          } else {
+            paginationButtons += `
             <li class="page-item ${i === page ? 'active' : ''}">
               <a class="page-link" href="javascript:void(0);" onclick="loadUsers(${i})">${i}</a>
             </li>
           `;
+          }
         }
-      }
 
-      // Next button
-      paginationButtons += `
+        // Next button
+        paginationButtons += `
         <li class="page-item ${page >= totalPages ? 'disabled' : ''}">
           <a class="page-link" href="javascript:void(0);" onclick="${page < totalPages ? `loadUsers(${page + 1})` : ''}">Next &raquo;</a>
         </li>
       `;
 
-      $('#paginationNav .pagination').html(paginationButtons);
-    }
-  });
-}
+        $('#paginationNav .pagination').html(paginationButtons);
+      }
+    });
+  }
 
 
   loadUsers();

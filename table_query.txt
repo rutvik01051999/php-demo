@@ -17,3 +17,51 @@ CREATE TABLE students (
     same_address VARCHAR(10) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+CREATE TABLE teachers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    mobile1 VARCHAR(20) NOT NULL,
+    mobile2 VARCHAR(20) NOT NULL,
+    inputAddress_current TEXT NOT NULL,
+    inputAddress2_current TEXT NOT NULL,
+    inputCity_current VARCHAR(100) NOT NULL,
+    inputState_current VARCHAR(100) NOT NULL,
+    inputZip_current VARCHAR(20) NOT NULL,
+    inputAddress_permanent TEXT NULL,
+    inputAddress2_permanent TEXT NULL,
+    inputCity_permanent VARCHAR(100) NULL,
+    inputState_permanent VARCHAR(100) NULL,
+    inputZip_permanent VARCHAR(20) NULL,
+    same_address VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE parents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    mobile_primary VARCHAR(20) NOT NULL,
+    mobile_secondary VARCHAR(20) NOT NULL,
+    inputAddress_current TEXT NOT NULL,
+    inputAddress2_current TEXT NOT NULL,
+    inputCity_current VARCHAR(100) NOT NULL,
+    inputState_current VARCHAR(100) NOT NULL,
+    inputZip_current VARCHAR(20) NOT NULL,
+    inputAddress_permanent TEXT DEFAULT NULL,
+    inputAddress2_permanent TEXT DEFAULT NULL,
+    inputCity_permanent VARCHAR(100) DEFAULT NULL,
+    inputState_permanent VARCHAR(100) DEFAULT NULL,
+    inputZip_permanent VARCHAR(20) DEFAULT NULL,
+    same_address VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+
