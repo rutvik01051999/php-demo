@@ -6,8 +6,11 @@ include '../../core/functions.php';
 session_start();
 redirect_if_not_logged_in();
 include '../../includes/header.php';
+include '../../core/dropdown.php';
 
-
+$states = getStates();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ?>
 <div class="content-wrapper ">
   <div class="container mt-5"><br>
@@ -46,9 +49,9 @@ include '../../includes/header.php';
 
 </div>
 <!-- Modal -->
- 
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
@@ -91,20 +94,28 @@ include '../../includes/header.php';
             <input type="text" name="inputAddress2_current" class="form-control" id="inputAddress2_current" placeholder="Apartment, studio, or floor">
           </div>
           <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity_current">City</label>
-              <input type="text" name="inputCity_current" class="form-control" id="inputCity_current">
-            </div>
+
             <div class="form-group col-md-4">
               <label for="inputState_current">State</label>
               <select id="inputState_current" name="inputState_current" class="form-control">
-                <option selected>Choose...</option>
-                <option>Gujarat</option>
-                <option>Maharashtra</option>
-
+                <option value="">Select State</option>
+                <?php foreach ($states as $state): ?>
+                  <option value="<?= htmlspecialchars($state['id']) ?>">
+                    <?= htmlspecialchars($state['name']) ?>
+                  </option>
+                <?php endforeach; ?>
               </select>
             </div>
-            <div class="form-group col-md-2">
+
+            <div class="form-group col-md-4">
+              <label for="inputCity_current">City</label>
+              <select id="inputCity_current" name="inputCity_current" class="form-control">
+                
+              </select>
+            </div>
+
+           
+            <div class="form-group col-md-4">
               <label for="inputZip_current">Zip</label>
               <input type="text" name="inputZip_current" class="form-control" id="inputZip_current">
             </div>
@@ -128,19 +139,27 @@ include '../../includes/header.php';
               <input type="text" name="inputAddress2_permanent" class="form-control" id="inputAddress2_permanent" placeholder="Apartment, studio, or floor">
             </div>
             <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="inputCity_permanent">City</label>
-                <input name="inputCity_permanent" type="text" class="form-control" id="inputCity_permanent">
-              </div>
+            
               <div class="form-group col-md-4">
                 <label for="inputState_permanent">State</label>
                 <select id="inputState_permanent" name="inputState_permanent" class="form-control">
-                  <option selected>Choose...</option>
-                  <option>Gujarat</option>
-                  <option>Maharashtra</option>
+                  <option value="">Select State</option>
+                  <?php foreach ($states as $state): ?>
+                    <option value="<?= htmlspecialchars($state['id']) ?>">
+                      <?= htmlspecialchars($state['name']) ?>
+                    </option>
+                  <?php endforeach; ?>
                 </select>
               </div>
-              <div class="form-group col-md-2">
+
+              <div class="form-group col-md-4">
+                <label for="inputCity_permanent">City</label>
+                <select id="inputCity_permanent" name="inputCity_permanent" class="form-control">
+                  
+                </select>
+              </div>
+
+              <div class="form-group col-md-4">
                 <label for="inputZip_permanent">Zip</label>
                 <input type="text" name="inputZip_permanent" class="form-control" id="inputZip_permanent">
               </div>
@@ -353,16 +372,107 @@ include '../../includes/header.php';
           $('#mobile').val(response.data.mobile);
           $('#inputAddress_current').val(response.data.inputAddress_current);
           $('#inputAddress2_current').val(response.data.inputAddress2_current);
-          $('#inputCity_current').val(response.data.inputCity_current);
           $('#inputZip_current').val(response.data.inputZip_current);
           $('#first_name').val(response.data.first_name);
           $('#id').val(response.data.id);
+          $('#inputState_current').val(response.data.inputState_current);
+          if (response.data.same_address == 1) {
+            getCitiesCur(response.data.inputState_current,response.data.inputCity_current);
+            $('#same_address').prop('checked', response.data.same_address);
+            $('.hide_section').hide()
+          } else {
+            getCitiesPer(response.data.inputState_permanent,response.data.inputCity_permanent);
+            $('#inputAddress_permanent').val(response.data.inputAddress_permanent);
+            $('#inputAddress2_permanent').val(response.data.inputAddress2_permanent);
+            $('#inputCity_permanent').val(response.data.inputCity_permanent);
+            $('#inputState_permanent').val(response.data.inputState_permanent);
+          }
+
           console.log(response.data);
         },
         error: function(error) {
           console.log(error);
         }
       });
+    });
+
+    $(document).on('change', '#inputState_current', function() {
+      var stateId = $(this).val();
+      console.log(stateId, 'state id');
+      getCitiesCur(stateId,0);
+      // if (stateId) {
+      //   $.ajax({
+      //     url: '../../core/student/get_cities.php',
+      //     type: 'POST',
+      //     data: {
+      //       state_id: stateId
+      //     },
+      //     success: function(response) {
+      //       $('#inputCity_current').html(response);
+      //     }
+      //   });
+      // } else {
+      //   $('#inputCity_current').html('<option value="">Select City</option>');
+      // }
+    });
+    function getCitiesCur(stateId,$cityId) {
+      if (stateId) {
+        $.ajax({
+          url: '../../core/student/get_cities.php',
+          type: 'POST',
+          data: {
+            state_id: stateId
+          },
+          success: function(response) {
+            $('#inputCity_current').html(response);
+            if($cityId) {
+              $('#inputCity_current').val($cityId);
+            }
+          }
+        });
+      } else {
+        $('#inputCity_current').html(response);
+      }
+    }
+
+    function getCitiesPer(stateId,$cityId) {
+      if (stateId) {
+        $.ajax({
+          url: '../../core/student/get_cities.php',
+          type: 'POST',
+          data: {
+            state_id: stateId
+          },
+          success: function(response) {
+            $('#inputCity_permanent').html(response);
+            if($cityId) {
+              $('#inputCity_permanent').val($cityId);
+            }
+          }
+        });
+      } else {
+        $('#inputCity_permanent').html(response);
+      }
+    }
+
+    $(document).on('change', '#inputState_permanent', function() {
+      var stateId = $(this).val();
+      console.log(stateId, 'state id');
+      getCitiesPer(stateId,0);
+      // if (stateId) {
+      //   $.ajax({
+      //     url: '../../core/student/get_cities.php',
+      //     type: 'POST',
+      //     data: {
+      //       state_id: stateId
+      //     },
+      //     success: function(response) {
+      //       $('#inputCity_permanent').html(response);
+      //     }
+      //   });
+      // } else {
+      //   $('#inputCity_permanent').html('<option value="">Select City</option>');
+      // }
     });
 
 

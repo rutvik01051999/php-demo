@@ -35,6 +35,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+  <style>
+    @media (min-width: 1200px) {
+
+      .container,
+      .container-lg,
+      .container-md,
+      .container-sm,
+      .container-xl {
+        max-width: 1340px !important;
+      }
+    }
+  </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -54,9 +67,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
         <li class="nav-item d-none d-sm-inline-block">
           <a href="index3.html" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="#" class="nav-link">Contact</a>
         </li>
       </ul>
 
@@ -84,64 +94,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
           </div>
         </li>
 
-        <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="far fa-comments"></i>
-            <span class="badge badge-danger navbar-badge">3</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $baseURL; ?>/public/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Brad Diesel
-                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">Call me whenever you can.</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $baseURL; ?>/public/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    John Pierce
-                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">I got your message bro</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $baseURL; ?>/public/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Nora Silvester
-                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">The subject goes here</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-          </div>
-        </li>
+
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
@@ -229,7 +182,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </p>
               </a>
             </li>
-            <li class="nav-item <?= $current_page == 'student.php' || $current_page == 'teacher.php' || $current_page == 'principle.php' ? 'menu-is-opening menu-open' : '' ?>">
+            <li class="nav-item <?= $current_page == 'student.php' || $current_page == 'parents.php' || $current_page == 'teacher.php' || $current_page == 'principle.php' ? 'menu-is-opening menu-open' : '' ?>">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
@@ -243,6 +196,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                   <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= $current_page == 'student.php' ? 'active' : '' ?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Students</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo $baseURL; ?>/views/admin/parents.php" class="nav-link <?= $current_page == 'parents.php' ? 'active' : '' ?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Parents</p>
                   </a>
                 </li>
                 <li class="nav-item">
