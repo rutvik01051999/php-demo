@@ -35,7 +35,8 @@ ini_set('display_errors', 1);
           <th></th>
           <th>Name</th>
           <th>Email</th>
-          <th>Date</th>
+          <th>Mobile</th>
+          <th>Joining Date</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -110,11 +111,11 @@ ini_set('display_errors', 1);
             <div class="form-group col-md-4">
               <label for="inputCity_current">City</label>
               <select id="inputCity_current" name="inputCity_current" class="form-control">
-                
+
               </select>
             </div>
 
-           
+
             <div class="form-group col-md-4">
               <label for="inputZip_current">Zip</label>
               <input type="text" name="inputZip_current" class="form-control" id="inputZip_current">
@@ -139,7 +140,7 @@ ini_set('display_errors', 1);
               <input type="text" name="inputAddress2_permanent" class="form-control" id="inputAddress2_permanent" placeholder="Apartment, studio, or floor">
             </div>
             <div class="form-row">
-            
+
               <div class="form-group col-md-4">
                 <label for="inputState_permanent">State</label>
                 <select id="inputState_permanent" name="inputState_permanent" class="form-control">
@@ -155,7 +156,7 @@ ini_set('display_errors', 1);
               <div class="form-group col-md-4">
                 <label for="inputCity_permanent">City</label>
                 <select id="inputCity_permanent" name="inputCity_permanent" class="form-control">
-                  
+
                 </select>
               </div>
 
@@ -167,7 +168,7 @@ ini_set('display_errors', 1);
 
           </div>
           <button type="submit" class="btn btn-primary">Save changes</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary close-footer" data-dismiss="modal">Close</button>
 
         </form>
       </div>
@@ -195,6 +196,7 @@ ini_set('display_errors', 1);
               <td>${user.id}</td>
               <td>${user.first_name}</td>
               <td>${user.email}</td>
+              <td>${user.mobile}</td>
               <td>${user.created_at}</td>
               <td>
                   <button class="btn btn-primary btn-sm edit" data-id="${user.id}">
@@ -373,15 +375,21 @@ ini_set('display_errors', 1);
           $('#inputAddress_current').val(response.data.inputAddress_current);
           $('#inputAddress2_current').val(response.data.inputAddress2_current);
           $('#inputZip_current').val(response.data.inputZip_current);
+          $('#inputCity_current').val(response.data.inputCity_current);
           $('#first_name').val(response.data.first_name);
           $('#id').val(response.data.id);
+          $('#inputZip_permanent').val(response.data.inputZip_permanent);
           $('#inputState_current').val(response.data.inputState_current);
           if (response.data.same_address == 1) {
-            getCitiesCur(response.data.inputState_current,response.data.inputCity_current);
-            $('#same_address').prop('checked', response.data.same_address);
+            console.log('same address checked');
+            getCitiesCur(response.data.inputState_current, response.data.inputCity_current);
+            $('#same_address').prop('checked', true);
             $('.hide_section').hide()
           } else {
-            getCitiesPer(response.data.inputState_permanent,response.data.inputCity_permanent);
+            console.log('diff address');
+            $('#same_address').prop('checked', false);
+            $('.hide_section').show()
+            getCitiesPer(response.data.inputState_permanent, response.data.inputCity_permanent);
             $('#inputAddress_permanent').val(response.data.inputAddress_permanent);
             $('#inputAddress2_permanent').val(response.data.inputAddress2_permanent);
             $('#inputCity_permanent').val(response.data.inputCity_permanent);
@@ -399,7 +407,7 @@ ini_set('display_errors', 1);
     $(document).on('change', '#inputState_current', function() {
       var stateId = $(this).val();
       console.log(stateId, 'state id');
-      getCitiesCur(stateId,0);
+      getCitiesCur(stateId, 0);
       // if (stateId) {
       //   $.ajax({
       //     url: '../../core/student/get_cities.php',
@@ -415,7 +423,8 @@ ini_set('display_errors', 1);
       //   $('#inputCity_current').html('<option value="">Select City</option>');
       // }
     });
-    function getCitiesCur(stateId,$cityId) {
+
+    function getCitiesCur(stateId, $cityId) {
       if (stateId) {
         $.ajax({
           url: '../../core/student/get_cities.php',
@@ -425,7 +434,7 @@ ini_set('display_errors', 1);
           },
           success: function(response) {
             $('#inputCity_current').html(response);
-            if($cityId) {
+            if ($cityId) {
               $('#inputCity_current').val($cityId);
             }
           }
@@ -435,7 +444,7 @@ ini_set('display_errors', 1);
       }
     }
 
-    function getCitiesPer(stateId,$cityId) {
+    function getCitiesPer(stateId, $cityId) {
       if (stateId) {
         $.ajax({
           url: '../../core/student/get_cities.php',
@@ -445,7 +454,7 @@ ini_set('display_errors', 1);
           },
           success: function(response) {
             $('#inputCity_permanent').html(response);
-            if($cityId) {
+            if ($cityId) {
               $('#inputCity_permanent').val($cityId);
             }
           }
@@ -458,7 +467,7 @@ ini_set('display_errors', 1);
     $(document).on('change', '#inputState_permanent', function() {
       var stateId = $(this).val();
       console.log(stateId, 'state id');
-      getCitiesPer(stateId,0);
+      getCitiesPer(stateId, 0);
       // if (stateId) {
       //   $.ajax({
       //     url: '../../core/student/get_cities.php',
@@ -487,6 +496,31 @@ ini_set('display_errors', 1);
         confirmButtonText: "Yes, delete it!"
       }).then((result) => {
         if (result.isConfirmed) {
+          $.ajax({
+            url: '../../core/student/delete.php', // PHP file to handle form submission
+            type: 'POST',
+            data: formData,
+            processData: false, // Prevent jQuery from converting FormData to a query string
+            contentType: false, // Use the default content type
+            success: function(response) {
+
+
+              console.log(response.errors)
+
+              if (response.success === false) {
+               
+              }
+              if (response.success == true) {
+                $('#exampleModal').modal('hide');
+                loadUsers($('.active').find('.page-link').text());
+              } else {
+                // alert(data.message); // Display error message
+              }
+            },
+            error: function(error) {
+              console.log(error);
+            }
+          });
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",

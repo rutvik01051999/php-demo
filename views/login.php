@@ -22,7 +22,7 @@ redirect_if_logged_in();
         $password = $_POST['password'];
 
         if (login($email, $password)) {
-          header("Location: profile.php");
+          header("Location: admin/dashboard.php");
           exit;
         } else {
           echo "<p class='text-danger'>Invalid email or password.</p>";

@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputZip_current = trim($_POST['inputZip_current']);
     $inputAddress_permanent = trim($_POST['inputAddress_permanent']) ? trim($_POST['inputAddress_permanent']) : null;
     $inputAddress2_permanent = trim($_POST['inputAddress2_permanent']) ? trim($_POST['inputAddress2_permanent']) : null;
-    $inputCity_permanent = trim($_POST['inputCity_permanent']) ? trim($_POST['inputCity_permanent']) : null;
+    $inputCity_permanent = trim($_POST['inputCity_permanent']);
     $inputState_permanent = trim($_POST['inputState_permanent']) ? trim($_POST['inputState_permanent']) : null;
     $inputZip_permanent = trim($_POST['inputZip_permanent']);
     $same_address = trim($_POST['same_address']);
