@@ -9,17 +9,113 @@ include '../../includes/header.php';
 include '../../core/dropdown.php';
 
 $states = getStates();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+$search = $_GET['search'] ?? '';
+$searchField = $_GET['searchField'] ?? 'name';
+$sortOrder = $_GET['sortOrder'] ?? 'asc';
+$sortField = $_GET['sortField'] ?? 'name';
+
 ?>
 <div class="content-wrapper ">
-  <div class="container mt-5"><br>
-    <button type="button" class="btn btn-primary addBtn">
-      Add
-    </button>
+  <div class="container mt-5">
+    <div class="row g-2 align-items-center">
+      <div class="col-auto">
+        <button type="button" class="btn btn-primary addBtn">Add</button>
+      </div>
+      <div class="col-auto">
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Filter
+          </button>
 
-    <!-- Filter Button -->
-    <button type="button" class="btn btn-primary" id="filterBtn">Filter</button><br><br>
+          <div class="dropdown-menu p-3" style="min-width: 320px;">
+            <form id="filterForm" method="GET" action="student.php">
+              <!-- Search box -->
+              <div class="row mb-2">
+                <div class="col-12">
+                  <input type="text" class="form-control form-control-sm" name="search" placeholder="Search..." value="<?= htmlspecialchars($search) ?>">
+                </div>
+              </div>
+
+              <!-- Search In -->
+              <div class="row mb-2">
+                <div class="col-12"><strong class="small">Search In</strong></div>
+                <div class="col-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="searchField" id="searchName" value="name" <?= $searchField === 'name' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="searchName">Name</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="searchField" id="searchEmail" value="email" <?= $searchField === 'email' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="searchEmail">Email</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="searchField" id="searchParent" value="parents_name" <?= $searchField === 'parents_name' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="searchParent">Parents</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sort Order -->
+              <div class="row mb-2">
+                <div class="col-12"><strong class="small">Sort Order</strong></div>
+                <div class="col-6">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sortOrder" id="asc" value="asc" <?= $sortOrder === 'asc' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="asc">ASC</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sortOrder" id="desc" value="desc" <?= $sortOrder === 'desc' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="desc">DESC</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sort By -->
+              <div class="row mb-2">
+                <div class="col-12"><strong class="small">Sort By</strong></div>
+                <div class="col-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="sortField" id="sortName" value="name" <?= $sortField === 'name' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="sortName">Name</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="sortField" id="sortEmail" value="email" <?= $sortField === 'email' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="sortEmail">Email</label>
+                  </div>
+                </div>
+                  <div class="col-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="sortField" id="sortEmail" value="email" <?= $sortField === 'email' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="sortEmail">Joing date</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <div class="row">
+                <div class="col-6">
+                  <button type="submit" class="btn btn-sm btn-primary w-100">Apply Filter</button>
+                </div>
+                 <div class="col-6">
+                  <button type="button" class="btn btn-sm btn-success w-100">Clear Filter</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <br>
 
     <!-- Pagination controls -->
     <nav id="paginationNav">
@@ -193,7 +289,7 @@ ini_set('display_errors', 1);
         $.each(response.users, function(index, user) {
           tableRows += `
           <tr>
-              <td>${user.id}</td>
+              <td>${index+1}</td>
               <td>${user.first_name}</td>
               <td>${user.email}</td>
               <td>${user.mobile}</td>
@@ -202,7 +298,7 @@ ini_set('display_errors', 1);
                   <button class="btn btn-primary btn-sm edit" data-id="${user.id}">
                       <i class="fas fa-edit"></i> Edit
                   </button>
-                  <button class="btn btn-danger btn-sm btn-delete">
+                  <button class="btn btn-danger btn-sm btn-delete" data-id="${user.id}">
                       <i class="fas fa-trash-alt"></i> Delete
                   </button>
               </td>
@@ -357,7 +453,7 @@ ini_set('display_errors', 1);
 
 
     $(document).on('click', '.edit', function() {
-      var userId = $(this).data('id');
+      let userId = $(this).data('id');
 
       $.ajax({
         url: '../../core/student/edit.php', // PHP file to handle form submission
@@ -486,6 +582,7 @@ ini_set('display_errors', 1);
 
 
     $(document).on('click', '.btn-delete', function() {
+      let userId = $(this).data('id');
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -499,16 +596,15 @@ ini_set('display_errors', 1);
           $.ajax({
             url: '../../core/student/delete.php', // PHP file to handle form submission
             type: 'POST',
-            data: formData,
-            processData: false, // Prevent jQuery from converting FormData to a query string
-            contentType: false, // Use the default content type
+            data: {
+              "id": userId
+            },
+            dataType: 'json',
             success: function(response) {
-
-
               console.log(response.errors)
 
               if (response.success === false) {
-               
+
               }
               if (response.success == true) {
                 $('#exampleModal').modal('hide');

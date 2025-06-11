@@ -105,42 +105,6 @@ include '../../includes/header.php';
             </div>
           </div>
 
-          <div>Permanent Address</div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" name="same_address" id="same_address">
-            <label class="form-check-label" for="same_address">
-              Same as current
-            </label>
-          </div>
-
-          <div class="hide_section">
-            <div class="form-group">
-              <label for="inputAddress_permanent">Address</label>
-              <input type="text" name="inputAddress_permanent" class="form-control" id="inputAddress_permanent" placeholder="1234 Main St">
-            </div>
-            <div class="form-group">
-              <label for="inputAddress2_permanent">Address 2</label>
-              <input type="text" name="inputAddress2_permanent" class="form-control" id="inputAddress2_permanent" placeholder="Apartment, studio, or floor">
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="inputCity_permanent">City</label>
-                <input name="inputCity_permanent" type="text" class="form-control" id="inputCity_permanent">
-              </div>
-              <div class="form-group col-md-4">
-                <label for="inputState_permanent">State</label>
-                <select id="inputState_permanent" name="inputState_permanent" class="form-control">
-                  <option selected>Choose...</option>
-                  <option>Gujarat</option>
-                  <option>Maharashtra</option>
-                </select>
-              </div>
-              <div class="form-group col-md-2">
-                <label for="inputZip_permanent">Zip</label>
-                <input type="text" name="inputZip_permanent" class="form-control" id="inputZip_permanent">
-              </div>
-            </div>
-          </div>
         </form>
                 </div>
                 <div class="modal-footer">

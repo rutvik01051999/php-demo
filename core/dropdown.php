@@ -1,5 +1,6 @@
 <?php
-include '/var/www/html/php-project/config/db.php';
+// include '/var/www/html/php-project/config/db.php';
+include __DIR__ . '../../config/db.php';
 
 function getStates() {
     global $pdo;

@@ -127,11 +127,29 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <i class="fas fa-expand-arrows-alt"></i>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="fas fa-user-circle"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <form method="POST" action="/php-project/admin/logout.php"  class="dropdown-item p-0 m-0">
+              <button type="submit" class="btn btn-link text-danger w-100 d-flex align-items-center">
+                <i class="fas fa-envelope mr-2"></i> Logout
+              </button>
+            </form>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-users mr-2"></i> Profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item dropdown-footer">See All Settings</a>
+          </div>
+        </li>
+        <!-- <li class="nav-item">
           <a class="nav-link" data-widget="control-sidebar" href="#" role="button">
             <i class="fas fa-user-circle"></i>
           </a>
-        </li>
+        </li> -->
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -152,7 +170,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <img src="<?php echo $baseURL; ?>/public/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block"><?php echo htmlspecialchars($_SESSION['user_name']); ?></a> 
+            <a href="#" class="d-block"><?php echo htmlspecialchars($_SESSION['user_name']); ?></a>
           </div>
         </div>
 
