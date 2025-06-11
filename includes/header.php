@@ -1,6 +1,7 @@
 <?php
-$baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/php-project';
-$current_page = basename($_SERVER['PHP_SELF']);
+require_once __DIR__ . '../../config/const.php'; // Adjust path as needed
+
+$baseURL = BASE_URL;$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
