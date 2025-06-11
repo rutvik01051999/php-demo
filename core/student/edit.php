@@ -1,5 +1,5 @@
 <?php
-require_once '/var/www/html/php-project/config/db.php';
+include __DIR__ . '/../../config/db.php';
 
 $id = $_POST['id'];
 $stmt = $pdo->prepare("SELECT * FROM students WHERE id = :id LIMIT 1");
