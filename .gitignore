@@ -1,0 +1,5 @@
+
+
+# Ignore a single file
+config/db.php
+config/const.php
