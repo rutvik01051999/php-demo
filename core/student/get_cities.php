@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../core/config/db.php';
+include __DIR__ . '/../../config/db.php';
 if (isset($_POST['state_id'])) {
     $stateId = $_POST['state_id'];
 
