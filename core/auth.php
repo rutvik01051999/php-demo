@@ -1,5 +1,6 @@
 <?php
-include '../config/db.php';
+// include '../config/db.php';
+include __DIR__ . '../../config/db.php';
 
 function login($email, $password) {
     global $pdo;

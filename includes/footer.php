@@ -31,10 +31,7 @@ $baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/php-proj
 <!-- ChartJS -->
 <script src="<?php echo $baseURL; ?>/public/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
-<script src="<?php echo $baseURL; ?>/public/plugins/sparklines/sparkline.js"></script>
 <!-- JQVMap -->
-<script src="<?php echo $baseURL; ?>/public/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo $baseURL; ?>/public/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="<?php echo $baseURL; ?>/public/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -49,14 +46,14 @@ $baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/php-proj
 <!-- AdminLTE App -->
 <script src="<?php echo $baseURL; ?>/public/dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="<?php echo $baseURL; ?>/public/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo $baseURL; ?>/public/dist/js/pages/dashboard.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="<?php echo $baseURL; ?>/public/dist/js/main.js"></script>
 
 
 </body>

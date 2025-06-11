@@ -8,7 +8,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>School Management | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -35,6 +35,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+  <style>
+    @media (min-width: 1200px) {
+
+      .container,
+      .container-lg,
+      .container-md,
+      .container-sm,
+      .container-xl {
+        max-width: 1340px !important;
+      }
+    }
+  </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -53,10 +66,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="index3.html" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="#" class="nav-link">Contact</a>
+          <a href="<?php echo $baseURL; ?>/views/admin/dashboard.php" class="nav-link">Home</a>
         </li>
       </ul>
 
@@ -84,64 +94,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
           </div>
         </li>
 
-        <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="far fa-comments"></i>
-            <span class="badge badge-danger navbar-badge">3</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $baseURL; ?>/public/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Brad Diesel
-                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">Call me whenever you can.</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $baseURL; ?>/public/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    John Pierce
-                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">I got your message bro</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $baseURL; ?>/public/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Nora Silvester
-                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">The subject goes here</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-          </div>
-        </li>
+
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
@@ -174,11 +127,29 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <i class="fas fa-expand-arrows-alt"></i>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="fas fa-user-circle"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <form method="POST" action="/php-project/admin/logout.php"  class="dropdown-item p-0 m-0">
+              <button type="submit" class="btn btn-link text-danger w-100 d-flex align-items-center">
+                <i class="fas fa-envelope mr-2"></i> Logout
+              </button>
+            </form>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-users mr-2"></i> Profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item dropdown-footer">See All Settings</a>
+          </div>
+        </li>
+        <!-- <li class="nav-item">
           <a class="nav-link" data-widget="control-sidebar" href="#" role="button">
             <i class="fas fa-user-circle"></i>
           </a>
-        </li>
+        </li> -->
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -186,9 +157,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="<?php echo $baseURL; ?>/views/admin/dashboard.php" class="brand-link">
         <img src="<?php echo $baseURL; ?>/public/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+        <span class="brand-text font-weight-light">School Management</span>
       </a>
 
       <!-- Sidebar -->
@@ -199,7 +170,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <img src="<?php echo $baseURL; ?>/public/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+            <a href="#" class="d-block"><?php echo htmlspecialchars($_SESSION['user_name']); ?></a>
           </div>
         </div>
 
@@ -229,13 +200,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </p>
               </a>
             </li>
-            <li class="nav-item <?= $current_page == 'student.php' || $current_page == 'teacher.php' || $current_page == 'principle.php' ? 'menu-is-opening menu-open' : '' ?>">
+            <li class="nav-item <?= $current_page == 'student.php' || $current_page == 'parents.php' || $current_page == 'teacher.php' || $current_page == 'principle.php' ? 'menu-is-opening menu-open' : '' ?>">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
-                  Layout Options
+                  User Management
                   <i class="fas fa-angle-left right"></i>
-                  <span class="badge badge-info right">6</span>
+                  <span class="badge badge-info right">4</span>
                 </p>
               </a>
               <ul class="nav nav-treeview">
@@ -243,6 +214,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                   <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= $current_page == 'student.php' ? 'active' : '' ?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Students</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="<?php echo $baseURL; ?>/views/admin/parents.php" class="nav-link <?= $current_page == 'parents.php' ? 'active' : '' ?>">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Parents</p>
                   </a>
                 </li>
                 <li class="nav-item">
