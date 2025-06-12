@@ -14,4 +14,17 @@ function getStates() {
     }
 }
 
+
+function getClasses() {
+    global $pdo;
+
+    try {
+        $stmt = $pdo->query("SELECT id, name, `div_name` FROM classes ORDER BY name ASC, `div_name` ASC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo "Error fetching classes: " . $e->getMessage();
+        return [];
+    }
+}
+
 ?>

@@ -91,4 +91,39 @@ ALTER TABLE students
     ADD CONSTRAINT fk_inputCity_permanent FOREIGN KEY (inputCity_permanent) REFERENCES cities(id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 
+CREATE TABLE classes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    div_name VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+INSERT INTO classes (name, div) VALUES
+('1', 'A'),
+('1', 'B'),
+('2', 'A'),
+('2', 'B'),
+('3', 'A'),
+('3', 'B'),
+('4', 'A'),
+('4', 'B'),
+('5', 'A'),
+('5', 'B'),
+('6', 'A'),
+('6', 'B'),
+('7', 'A'),
+('7', 'B'),
+('8', 'A'),
+('8', 'B'),
+('9', 'A'),
+('9', 'B'),
+('10', 'A'),
+('10', 'B'),
+('11', 'A'),
+('11', 'B'),
+('12', 'A'),
+('12', 'B');
+
+ALTER TABLE students
+ADD COLUMN class_id INT AFTER email,
+ADD CONSTRAINT fk_class_id FOREIGN KEY (class_id) REFERENCES classes(id);

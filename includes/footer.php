@@ -56,6 +56,7 @@ $baseURL = BASE_URL;$current_page = basename($_SERVER['PHP_SELF']);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="<?php echo $baseURL; ?>/public/dist/js/main.js"></script>
+<script src="<?php echo $baseURL; ?>/public/plugins/select2/js/select2.full.min.js"></script>
 
 
 </body>

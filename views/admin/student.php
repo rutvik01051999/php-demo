@@ -9,6 +9,7 @@ include '../../includes/header.php';
 include '../../core/dropdown.php';
 
 $states = getStates();
+$class_div = getClasses();
 $search = $_GET['search'] ?? '';
 $searchField = $_GET['searchField'] ?? 'name';
 $sortOrder = $_GET['sortOrder'] ?? 'asc';
@@ -162,33 +163,49 @@ $sortField = $_GET['sortField'] ?? 'name';
           <input type="hidden" name="id" id="id">
           <div>Student Detail</div>
           <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
               <label for="first_name">First Name</label>
               <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first_name">
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
               <label for="last_name">Last Name</label>
               <input type="text" name="last_name" class="form-control" id="last_name" placeholder="last_name">
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
               <label for="inputEmail4">Email</label>
               <input type="email" class="form-control" name="email" id="inputEmail4" placeholder="Email">
             </div>
+          </div>
+          <div class="form-row">
+
             <div class="form-group col-md-6">
               <label for="mobile">Mobile</label>
               <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Mobile">
             </div>
+
+             <div class="form-group col-md-6">
+              <label for="class_div">Classes</label>
+              <select id="class_div" name="class_div" class="form-control">
+                <option value="">Select class and Div</option>
+                <?php foreach ($class_div as $classval): ?>
+                  <option value="<?= htmlspecialchars($classval['id']) ?>">
+                     <?= htmlspecialchars($classval['name'] . ' - ' . $classval['div_name']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div> 
+
           </div>
           <div>Current Address</div>
-          <div class="form-group">
-            <label for="inputAddress_current">Address</label>
-            <input type="text" name="inputAddress_current" class="form-control" id="inputAddress_current" placeholder="1234 Main St">
-          </div>
-          <div class="form-group">
-            <label for="inputAddress2_current">Address 2</label>
-            <input type="text" name="inputAddress2_current" class="form-control" id="inputAddress2_current" placeholder="Apartment, studio, or floor">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputAddress_current">Address</label>
+              <input type="text" name="inputAddress_current" class="form-control" id="inputAddress_current" placeholder="1234 Main St">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputAddress2_current">Address 2</label>
+              <input type="text" name="inputAddress2_current" class="form-control" id="inputAddress2_current" placeholder="Apartment, studio, or floor">
+            </div>
           </div>
           <div class="form-row">
 
@@ -227,13 +244,15 @@ $sortField = $_GET['sortField'] ?? 'name';
           </div>
 
           <div class="hide_section">
-            <div class="form-group">
-              <label for="inputAddress_permanent">Address</label>
-              <input type="text" name="inputAddress_permanent" class="form-control" id="inputAddress_permanent" placeholder="1234 Main St">
-            </div>
-            <div class="form-group">
-              <label for="inputAddress2_permanent">Address 2</label>
-              <input type="text" name="inputAddress2_permanent" class="form-control" id="inputAddress2_permanent" placeholder="Apartment, studio, or floor">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputAddress_permanent">Address</label>
+                <input type="text" name="inputAddress_permanent" class="form-control" id="inputAddress_permanent" placeholder="1234 Main St">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputAddress2_permanent">Address 2</label>
+                <input type="text" name="inputAddress2_permanent" class="form-control" id="inputAddress2_permanent" placeholder="Apartment, studio, or floor">
+              </div>
             </div>
             <div class="form-row">
 
@@ -292,7 +311,7 @@ $sortField = $_GET['sortField'] ?? 'name';
       },
       dataType: 'json',
       success: function(response) {
-        
+
         // Display user data
         var tableRows = '';
         $.each(response.users, function(index, user) {
@@ -356,7 +375,7 @@ $sortField = $_GET['sortField'] ?? 'name';
             paginationButtons += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
           } else {
 
-            console.log(i,page);
+            console.log(i, page);
 
             paginationButtons += `
             <li class="page-item ${i === page ? 'active' : ''}">

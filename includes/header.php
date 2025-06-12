@@ -36,6 +36,9 @@ $baseURL = BASE_URL;$current_page = basename($_SERVER['PHP_SELF']);
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+  <link rel="stylesheet" href="<?php echo $baseURL; ?>/public/plugins/select2/css/select2.min.css">
+
+
   <style>
     @media (min-width: 1200px) {
 
