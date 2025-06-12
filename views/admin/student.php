@@ -1,7 +1,7 @@
 <?php
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
-$baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/php-project/views/admin';
+// $baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/php-project/views/admin';
 include '../../core/functions.php';
 session_start();
 redirect_if_not_logged_in();
@@ -91,10 +91,10 @@ $sortField = $_GET['sortField'] ?? 'name';
                     <label class="form-check-label small" for="sortEmail">Email</label>
                   </div>
                 </div>
-                  <div class="col-4">
+                <div class="col-4">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortField" id="sortEmail" value="email" <?= $sortField === 'email' ? 'checked' : '' ?>>
-                    <label class="form-check-label small" for="sortEmail">Joing date</label>
+                    <input class="form-check-input" type="radio" name="sortField" id="sortDate" value="date" <?= $sortField === 'date' ? 'checked' : '' ?>>
+                    <label class="form-check-label small" for="sortDate">Joing date</label>
                   </div>
                 </div>
               </div>
@@ -104,7 +104,7 @@ $sortField = $_GET['sortField'] ?? 'name';
                 <div class="col-6">
                   <button type="submit" class="btn btn-sm btn-primary w-100">Apply Filter</button>
                 </div>
-                 <div class="col-6">
+                <div class="col-6">
                   <button type="button" class="btn btn-sm btn-success w-100">Clear Filter</button>
                 </div>
               </div>
@@ -273,6 +273,10 @@ $sortField = $_GET['sortField'] ?? 'name';
 </div>
 <?php include '../../includes/footer.php'; ?>
 <script>
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has(param) ? urlParams.get(param) : null;
+  }
   // Function to load users and pagination
   function loadUsers(page = 1) {
     console.log(page);
@@ -281,6 +285,10 @@ $sortField = $_GET['sortField'] ?? 'name';
       method: 'GET',
       data: {
         page: page,
+        search: getQueryParam('search'),
+        searchField: getQueryParam('searchField'),
+        sortOrder: getQueryParam('sortOrder'),
+        sortField: getQueryParam('sortField'),
       },
       dataType: 'json',
       success: function(response) {
@@ -625,7 +633,6 @@ $sortField = $_GET['sortField'] ?? 'name';
         }
       });
     });
-
 
   });
 </script>
