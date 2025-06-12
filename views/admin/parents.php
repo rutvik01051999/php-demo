@@ -76,34 +76,8 @@ include '../../includes/header.php';
               <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Mobile">
             </div>
           </div>
-          <div>Current Address</div>
-          <div class="form-group">
-            <label for="inputAddress_current">Address</label>
-            <input type="text" name="inputAddress_current" class="form-control" id="inputAddress_current" placeholder="1234 Main St">
-          </div>
-          <div class="form-group">
-            <label for="inputAddress2_current">Address 2</label>
-            <input type="text" name="inputAddress2_current" class="form-control" id="inputAddress2_current" placeholder="Apartment, studio, or floor">
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity_current">City</label>
-              <input type="text" name="inputCity_current" class="form-control" id="inputCity_current">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="inputState_current">State</label>
-              <select id="inputState_current" name="inputState_current" class="form-control">
-                <option selected>Choose...</option>
-                <option>Gujarat</option>
-                <option>Maharashtra</option>
-
-              </select>
-            </div>
-            <div class="form-group col-md-2">
-              <label for="inputZip_current">Zip</label>
-              <input type="text" name="inputZip_current" class="form-control" id="inputZip_current">
-            </div>
-          </div>
+          <div>Students detail</div>
+        
 
         </form>
                 </div>

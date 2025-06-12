@@ -279,7 +279,7 @@ $sortField = $_GET['sortField'] ?? 'name';
   }
   // Function to load users and pagination
   function loadUsers(page = 1) {
-    console.log(page);
+    console.log('loaduser function page', page);
     $.ajax({
       url: '../../core/student/get.php',
       method: 'GET',
@@ -292,11 +292,12 @@ $sortField = $_GET['sortField'] ?? 'name';
       },
       dataType: 'json',
       success: function(response) {
+        
         // Display user data
         var tableRows = '';
         $.each(response.users, function(index, user) {
           tableRows += `
-          <tr>
+          <tr class="user-row">
               <td>${index+1}</td>
               <td>${user.first_name}</td>
               <td>${user.email}</td>
@@ -313,6 +314,7 @@ $sortField = $_GET['sortField'] ?? 'name';
           </tr>
         `;
         });
+        $('#usersTable tbody').html('');
         $('#usersTable tbody').html(tableRows);
 
         // Build pagination
@@ -353,6 +355,9 @@ $sortField = $_GET['sortField'] ?? 'name';
           if (i === '...') {
             paginationButtons += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
           } else {
+
+            console.log(i,page);
+
             paginationButtons += `
             <li class="page-item ${i === page ? 'active' : ''}">
               <a class="page-link" href="javascript:void(0);" onclick="loadUsers(${i})">${i}</a>
@@ -369,6 +374,7 @@ $sortField = $_GET['sortField'] ?? 'name';
       `;
 
         $('#paginationNav .pagination').html(paginationButtons);
+
       }
     });
   }
@@ -377,11 +383,9 @@ $sortField = $_GET['sortField'] ?? 'name';
   loadUsers();
 
   $(document).ready(function() {
-    var activePageLinkText = $('.active').find('.page-link').text();
-
-    console.log(activePageLinkText, 'active page link text');
-
     $('#dataForm').on('submit', function(e) {
+      let activePage = $('.active').find('.page-link').text();
+
       e.preventDefault(); // Prevent default form submission
       const formData = new FormData(this);
       // Handle checkbox
@@ -426,7 +430,7 @@ $sortField = $_GET['sortField'] ?? 'name';
 
             $('#exampleModal').modal('hide');
             $('#dataForm')[0].reset();
-            loadUsers($('.active').find('.page-link').text());
+            loadUsers(parseInt(activePage)); // Reload users on the current page
 
           } else {
             // alert(data.message); // Display error message
@@ -616,7 +620,7 @@ $sortField = $_GET['sortField'] ?? 'name';
               }
               if (response.success == true) {
                 $('#exampleModal').modal('hide');
-                loadUsers($('.active').find('.page-link').text());
+                loadUsers(parseInt($('.active').find('.page-link').text()));
               } else {
                 // alert(data.message); // Display error message
               }

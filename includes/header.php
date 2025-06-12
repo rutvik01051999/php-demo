@@ -248,12 +248,6 @@ $baseURL = BASE_URL;$current_page = basename($_SERVER['PHP_SELF']);
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="<?php echo $baseURL; ?>/views/admin/std.php" class="nav-link <?= $current_page == 'std.php' ? 'active' : '' ?>">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Standard and Division</p>
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a href="<?php echo $baseURL; ?>/views/admin/class.php" class="nav-link <?= $current_page == 'class.php' ? 'active' : '' ?>">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Class</p>
@@ -262,7 +256,7 @@ $baseURL = BASE_URL;$current_page = basename($_SERVER['PHP_SELF']);
                 <li class="nav-item">
                   <a href="<?php echo $baseURL; ?>/views/admin/student.php" class="nav-link <?= $current_page == 'index.php' ? 'active' : '' ?>">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Principles</p>
+                    <p>Fees</p>
                   </a>
                 </li>
               </ul>
