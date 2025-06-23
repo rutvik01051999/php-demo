@@ -133,6 +133,7 @@ $sortField = $_GET['sortField'] ?? 'name';
           <th>Name</th>
           <th>Email</th>
           <th>Mobile</th>
+          <th>Parents</th>
           <th>Joining Date</th>
           <th>Action</th>
         </tr>
@@ -183,17 +184,18 @@ $sortField = $_GET['sortField'] ?? 'name';
               <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Mobile">
             </div>
 
-             <div class="form-group col-md-6">
+            <div class="form-group col-md-6">
               <label for="class_div">Classes</label>
               <select id="class_div" name="class_div" class="form-control">
                 <option value="">Select class and Div</option>
-                <?php foreach ($class_div as $classval): ?>
-                  <option value="<?= htmlspecialchars($classval['id']) ?>">
-                     <?= htmlspecialchars($classval['name'] . ' - ' . $classval['div_name']) ?>
+                <?php foreach ($class_div as $class): ?>
+                  <option value="<?= htmlspecialchars($class['id']) ?>">
+                    <?= htmlspecialchars($class['name'] . ' - ' . $class['div_name']) ?>
                   </option>
                 <?php endforeach; ?>
+
               </select>
-            </div> 
+            </div>
 
           </div>
           <div>Current Address</div>
@@ -318,9 +320,10 @@ $sortField = $_GET['sortField'] ?? 'name';
           tableRows += `
           <tr class="user-row">
               <td>${index+1}</td>
-              <td>${user.first_name}</td>
+              <td>${user.student_first_name}</td>
               <td>${user.email}</td>
               <td>${user.mobile}</td>
+              <td>${user.parent_names || '-'}</td>
               <td>${user.created_at}</td>
               <td>
                   <button class="btn btn-primary btn-sm edit" data-id="${user.id}">
@@ -506,6 +509,7 @@ $sortField = $_GET['sortField'] ?? 'name';
           $('#first_name').val(response.data.first_name);
           $('#id').val(response.data.id);
           $('#inputZip_permanent').val(response.data.inputZip_permanent);
+          $('#class_div').val(response.data.class_id);
           $('#inputState_current').val(response.data.inputState_current);
           if (response.data.same_address == 1) {
             console.log('same address checked');

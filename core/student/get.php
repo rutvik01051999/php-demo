@@ -22,7 +22,7 @@ $validSortFields = [
     'email' => 'students.email',
     'date' => 'students.created_at'
 ];
-$sortFieldSql = $validSortFields[$sortField] ?? 'students.first_name';
+$sortFieldSql = $validSortFields[$sortField] ?? 's.first_name';
 $sortOrderSql = in_array($sortOrder, ['asc', 'desc']) ? strtoupper($sortOrder) : 'ASC';
 
 $where = '';
@@ -59,9 +59,38 @@ if ($search !== '' && $searchField === 'name') {
         exit;
     }
 }
+//quesry with parents
+
+// SELECT 
+//     s.first_name AS student_first_name,
+//     s.last_name AS student_last_name,
+//     s.email,
+//     s.mobile_primary,
+//     s.created_at,
+//     p.first_name AS parent_first_name
+// FROM students s
+// LEFT JOIN students_parents sp ON sp.student_id = s.id
+// LEFT JOIN parents p ON p.id = sp.parent_id
+// $where
+// ORDER BY $sortFieldSql $sortOrderSql
+// LIMIT ?, ?
 
 // Final query
-$query = "SELECT * FROM students $where ORDER BY $sortFieldSql $sortOrderSql LIMIT ?, ?";
+$query = "SELECT 
+    s.id,
+    s.first_name AS student_first_name,
+    s.last_name AS student_last_name,
+    s.email,
+    s.mobile AS mobile,
+    s.created_at,
+    GROUP_CONCAT(p.first_name SEPARATOR ', ') AS parent_names
+FROM students s
+LEFT JOIN students_parents sp ON sp.student_id = s.id
+LEFT JOIN parents p ON p.id = sp.parent_id
+GROUP BY s.id
+ORDER BY s.first_name
+LIMIT ?, ?
+";
 $stmt = $pdo->prepare($query);
 
 // Bind dynamic and pagination params
@@ -75,6 +104,7 @@ $stmt->bindValue($bindIndex++, (int)$limit, PDO::PARAM_INT);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
 // Count query
 $countQuery = "SELECT COUNT(*) as total FROM students $where";
 $countStmt = $pdo->prepare($countQuery);
@@ -87,6 +117,7 @@ foreach ($params as $param) {
 $countStmt->execute();
 $total_rows = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
 $total_pages = ceil($total_rows / $limit);
+// $users['created_at'] = date('d-m-Y', strtotime($users['created_at']));
 
 // Output
 echo json_encode([

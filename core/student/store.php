@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Retrieve input data
     $id = isset($_POST['id']) ? trim($_POST['id']) : null;
+    $class_id = isset($_POST['class_div']) ? trim($_POST['class_div']) : null;
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $email = trim($_POST['email']);
@@ -35,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['first_name'] = "First name is required.";
     } elseif (!preg_match("/^[a-zA-Z ]+$/", $first_name)) {
         $errors['first_name'] = "First name should only contain letters and spaces.";
+    }
+
+    if (empty($class_id)) {
+        $errors['class_div'] = "class and div is required.";
     }
 
     if (empty($last_name)) {
@@ -116,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("
                     UPDATE students SET
                     first_name = :first_name,
+                    class_id = :class_id,
                     last_name = :last_name,
                     email = :email,
                     mobile = :mobile,
@@ -143,9 +149,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Insert new student
             $stmt = $pdo->prepare("
                 INSERT INTO students 
-                (first_name, last_name, email, mobile, inputAddress_current, inputAddress2_current, inputCity_current, inputState_current, inputZip_current, inputAddress_permanent, inputAddress2_permanent, inputCity_permanent, inputState_permanent, inputZip_permanent,same_address)
+                (first_name, last_name, email, mobile, inputAddress_current, inputAddress2_current, inputCity_current, inputState_current, inputZip_current, inputAddress_permanent, inputAddress2_permanent, inputCity_permanent, inputState_permanent, inputZip_permanent,same_address,class_id)
                 VALUES 
-                (:first_name, :last_name, :email, :mobile, :inputAddress_current, :inputAddress2_current, :inputCity_current, :inputState_current, :inputZip_current, :inputAddress_permanent, :inputAddress2_permanent, :inputCity_permanent, :inputState_permanent, :inputZip_permanent, :same_address)
+                (:first_name, :last_name, :email, :mobile, :inputAddress_current, :inputAddress2_current, :inputCity_current, :inputState_current, :inputZip_current, :inputAddress_permanent, :inputAddress2_permanent, :inputCity_permanent, :inputState_permanent, :inputZip_permanent, :same_address, :class_id)
             ");
         }
 
@@ -165,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':inputState_permanent', $inputState_permanent);
         $stmt->bindParam(':inputZip_permanent', $inputZip_permanent);
         $stmt->bindParam(':same_address', $same_address);
+        $stmt->bindParam(':class_id', $class_id);
         // Execute query
         $stmt->execute();
 

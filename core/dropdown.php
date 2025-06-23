@@ -2,7 +2,8 @@
 // include '/var/www/html/php-project/config/db.php';
 include __DIR__ . '../../config/db.php';
 
-function getStates() {
+function getStates()
+{
     global $pdo;
 
     try {
@@ -15,7 +16,8 @@ function getStates() {
 }
 
 
-function getClasses() {
+function getClasses()
+{
     global $pdo;
 
     try {
@@ -27,4 +29,24 @@ function getClasses() {
     }
 }
 
-?>
+function getStudents()
+{
+    global $pdo;
+
+    try {
+        $stmt = $pdo->query("
+        SELECT 
+            students.first_name, 
+            students.id AS student_id,
+            classes.name, 
+            classes.div_name 
+        FROM students 
+        INNER JOIN classes ON students.class_id = classes.id 
+        ORDER BY students.id ASC
+    ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo "Error fetching data: " . $e->getMessage();
+        return [];
+    }
+}
